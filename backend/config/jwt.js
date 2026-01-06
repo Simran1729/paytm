@@ -1,5 +1,5 @@
 require('dotenv').config();
 
-const JWT_TOKEN = process.env.JWT_TOKEN;
+const JWT_SECRET = process.env.JWT_SECRET;
 
-module.exports = JWT_TOKEN;
+module.exports = JWT_SECRET;

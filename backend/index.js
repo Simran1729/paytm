@@ -5,6 +5,7 @@ const cors = require('cors');
 const mainRouter = require('./routes');
 const connectDb = require('./config/db');
 require('dotenv').config();
+const errorMiddleware = require('./middlewares/error.middleware')
 
 const app = express();
 const PORT = process.env.PORT;
@@ -18,6 +19,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/api/v1', mainRouter);
+
+app.use(errorMiddleware);
 
 connectDb();
 
