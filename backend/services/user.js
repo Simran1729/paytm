@@ -34,13 +34,10 @@ const LoginUser = async({userName, password}) => {
         throw new Error("User doesn't exist");
     }
 
-    const passwordMatch = bcrypt.compare(password, userExist.password);
+    const passwordMatch = await bcrypt.compare(password, userExist.password);
 
     if(!passwordMatch){
-        res.status(401).json({
-            success : false,
-            message : "Invalid credentials. Unauthorized"
-        })
+        throw new Error("Invalid credentials");
     }
 
     //password matched and user found, create token and return it

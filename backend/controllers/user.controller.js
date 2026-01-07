@@ -29,7 +29,7 @@ const signUpController = async (req, res, next) => {
         }else{
               return res.status(400).json({
                 success: false,
-                errors: validationResult.error.errors
+                errors: validationResult
             });
         }
     } catch(err){
@@ -56,7 +56,7 @@ const signInController = async (req, res, next) => {
         }else{
              return res.status(400).json({
                 success: false,
-                errors: validationResult.error.errors
+                errors: validationResult
             });
         }
     } catch(err){
