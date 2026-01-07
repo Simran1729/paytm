@@ -51,4 +51,8 @@ const LoginUser = async({userName, password}) => {
     return token;
 }
 
-module.exports = {createUser, LoginUser};
+const updateUser = async(body, id) => {
+    await User.findOneAndUpdate({_id : id}, req.body);
+}
+
+module.exports = {createUser, LoginUser, updateUser};

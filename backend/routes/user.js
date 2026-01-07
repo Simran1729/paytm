@@ -1,6 +1,8 @@
 const express = require('express');
 const userRouter = express.Router();
-const {signUpController,signInController} = require('../controllers/user.controller')
+
+const authMiddleware = require('../middlewares/auth.middleware');
+const {signUpController,signInController,updateUserController} = require('../controllers/user.controller')
 
 userRouter.get('/', (req, res) => {
     res.status(200).json({
@@ -10,6 +12,7 @@ userRouter.get('/', (req, res) => {
 
 
 userRouter.post('/signup', signUpController);
-userRouter.post('/signin', signInController)
+userRouter.post('/signin', signInController);
+userRouter.post('/udpateUser', authMiddleware, updateUserController);
 
 module.exports = userRouter;

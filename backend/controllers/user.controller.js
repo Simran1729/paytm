@@ -1,5 +1,5 @@
 const {z} = require('zod');
-const {createUser, LoginUser} = require('../services/user')
+const {createUser, LoginUser, updateUser} = require('../services/user')
 
 
 const SignUpSchema = z.object({
@@ -64,4 +64,30 @@ const signInController = async (req, res, next) => {
     }
 }
 
-module.exports = {signUpController,signInController};
+
+const UpdateUserSchema = z.object({
+    firstName : z.string().trim().optional(),
+    lastName : z.string().trim().optional(),
+    password : z.string().trim().min(6, {error : "Password must be atleast 6 chars long"}).optional()
+})
+
+const updateUserController = async (req, res, next) => {
+    const body = req.body;
+    const id = req.userId;
+
+    const validationResult = UpdateUserSchema.safeParse(body);
+    if(!validationResult.success){
+        res.status(400).json({
+            success : false,
+            message : validationResult
+        })
+    }
+    await updateUser(body, id);
+    res.status(200).json({
+        success : true,
+        message : "User updated successfully"
+    })
+    
+}
+
+module.exports = {signUpController,signInController,updateUserController};
