@@ -2,6 +2,7 @@ const JWT_SECRET = require('../config/jwt');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
+const Account = require('../models/account.model');
 
 
 const createUser = async({userName, firstName, lastName, password}) => {
@@ -18,6 +19,10 @@ const createUser = async({userName, firstName, lastName, password}) => {
         throw new Error("Error creating new user");
     }
 
+    //give the user a random balance on signup : 100 >= balance >= 1
+    const balance = (Math.random()*100).toFixed(0);
+    const createdAccount = await Account.create({user : newUser._id, balance});
+
     const payload = {
         id : newUser._id,
         userName,
@@ -25,7 +30,7 @@ const createUser = async({userName, firstName, lastName, password}) => {
 
     const token = jwt.sign(payload, JWT_SECRET);
 
-    return {newUser, token};
+    return {newUser, token,createdAccount};
 }
 
 const LoginUser = async({userName, password}) => {
@@ -55,7 +60,7 @@ const updateUser = async(body, id) => {
     await User.findOneAndUpdate({_id : id}, req.body);
 }
 
-    const fetchBulkUsers = async(id, filter) => {
+const fetchBulkUsers = async(id, filter) => {
         let query = { _id : {$ne : id} };
         if(filter){
             query.$or = [

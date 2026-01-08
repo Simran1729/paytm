@@ -1,5 +1,5 @@
 const {z} = require('zod');
-const {createUser, LoginUser, updateUser,fetchBulkUsers} = require('../services/user')
+const {createUser, LoginUser, updateUser,fetchBulkUsers} = require('../services/user.service')
 
 
 const SignUpSchema = z.object({
@@ -14,7 +14,10 @@ const signUpController = async (req, res, next) => {
         const body = req.body;
         const validationResult = SignUpSchema.safeParse(body);
         if(validationResult.success){
-            const {newUser, token} = await createUser(body);
+            const {newUser, token,createdAccount} = await createUser(body);
+            const accountObject = createdAccount.toObject();
+            delete accountObject.__v;
+
             res.status(201).json({
                 success : true,
                 message : "User created successfully",
@@ -24,6 +27,7 @@ const signUpController = async (req, res, next) => {
                     firstName : newUser.firstName,
                     lastName : newUser.lastName
                 },
+                account : accountObject,
                 token
             })
         }else{
