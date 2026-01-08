@@ -1,5 +1,5 @@
 const {z} = require('zod');
-const {createUser, LoginUser, updateUser} = require('../services/user')
+const {createUser, LoginUser, updateUser,fetchBulkUsers} = require('../services/user')
 
 
 const SignUpSchema = z.object({
@@ -90,4 +90,20 @@ const updateUserController = async (req, res, next) => {
     
 }
 
-module.exports = {signUpController,signInController,updateUserController};
+
+const bulkUsersController = async (req, res) => {
+    const filter = req.query.filter || "";
+    const userId = req.userId;
+
+    try{
+        const users = await fetchBulkUsers(userId, filter);
+        res.status(200).json({
+            success : true, 
+            users
+        })
+    } catch(err){
+        next(err);
+    }
+}
+
+module.exports = {signUpController,signInController,updateUserController,bulkUsersController};

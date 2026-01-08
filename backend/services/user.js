@@ -55,4 +55,17 @@ const updateUser = async(body, id) => {
     await User.findOneAndUpdate({_id : id}, req.body);
 }
 
-module.exports = {createUser, LoginUser, updateUser};
+    const fetchBulkUsers = async(id, filter) => {
+        let query = { _id : {$ne : id} };
+        if(filter){
+            query.$or = [
+                { firstName : { $regex : filter, $options : "i"}},
+                { lastName : { $regex : filter, $options : "i"}}
+            ]
+        }
+
+    const users = await User.find(query).select("_id userName firstName lastName");
+    return users;
+}
+
+module.exports = {createUser, LoginUser, updateUser,fetchBulkUsers};
