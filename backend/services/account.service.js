@@ -35,7 +35,7 @@ const transferAmount = async (fromId, {id, amount}) => {
 
             const updatedFromAccount = await Account.updateOne(
                 {user : fromId, balance : {$gte : amount}},
-                {balance : {$inc : -amount}},
+                {$inc : {balance : -amount}},
                 {session}
             );
 
@@ -45,7 +45,7 @@ const transferAmount = async (fromId, {id, amount}) => {
 
             await Account.updateOne(
                 {user : id},
-                {balance : {$inc : amount}},
+                {$inc : {balance : amount}},
                 {session}
             );
         })

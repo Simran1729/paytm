@@ -1,7 +1,7 @@
 const {z} = require('zod');
 const {getBalance,transferAmount} = require("../services/account.service")
 
-const getBalanceController = async(req, res) => {
+const getBalanceController = async(req, res, next) => {
     const userId = req.userId;
     if(!userId){
         throw new Error("No user Id found in req object")
@@ -23,7 +23,7 @@ const TransferSchema = z.object({
     amount : z.number()
 })
 
-const transferController = async (req, res) => {
+const transferController = async (req, res, next) => {
     const body = req.body;
     const fromId = req.userId;
     
@@ -33,7 +33,7 @@ const transferController = async (req, res) => {
         if(!validationResult.success){
             res.status(400).json({
                 success : false,
-                message : validationResult.message
+                message : validationResult
             })
         }
 
