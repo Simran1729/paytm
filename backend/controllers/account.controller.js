@@ -9,7 +9,7 @@ const getBalanceController = async(req, res, next) => {
 
     try{
         const balance = await getBalance(userId);
-        res.status(200).json({
+        return res.status(200).json({
             success : true,
             balance
         })
@@ -31,14 +31,14 @@ const transferController = async (req, res, next) => {
         const validationResult = TransferSchema.safeParse(body);
     
         if(!validationResult.success){
-            res.status(400).json({
+            return res.status(400).json({
                 success : false,
                 message : validationResult
             })
         }
 
         await transferAmount(fromId, body);
-        res.status(200).json({
+        return res.status(200).json({
             success : true,
             message : "Amount Transfer Successful"
         })

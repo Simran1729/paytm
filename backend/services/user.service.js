@@ -73,4 +73,13 @@ const fetchBulkUsers = async(id, filter) => {
     return users;
 }
 
-module.exports = {createUser, LoginUser, updateUser,fetchBulkUsers};
+const getMe = async(id) =>{
+    const user = await User.$ne.findOne({_id : id}).select("-password");
+    if(!user){
+        throw new Error("User not found");
+    }
+
+    return user;
+}
+
+module.exports = {createUser, LoginUser, updateUser,fetchBulkUsers,getMe};

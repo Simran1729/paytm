@@ -1,5 +1,5 @@
 const {z} = require('zod');
-const {createUser, LoginUser, updateUser,fetchBulkUsers} = require('../services/user.service')
+const {createUser, LoginUser, updateUser,fetchBulkUsers,getMe} = require('../services/user.service')
 
 
 const SignUpSchema = z.object({
@@ -18,7 +18,7 @@ const signUpController = async (req, res, next) => {
             const accountObject = createdAccount.toObject();
             delete accountObject.__v;
 
-            res.status(201).json({
+            return res.status(201).json({
                 success : true,
                 message : "User created successfully",
                 user : {
@@ -53,7 +53,7 @@ const signInController = async (req, res, next) => {
         const validationResult = SignInSchema.safeParse(body);
         if(validationResult.success){
             const token = await LoginUser(body);
-            res.status(200).json({
+            return res.status(200).json({
                 success : true,
                 token
             })
@@ -81,13 +81,13 @@ const updateUserController = async (req, res, next) => {
 
     const validationResult = UpdateUserSchema.safeParse(body);
     if(!validationResult.success){
-        res.status(400).json({
+        return res.status(400).json({
             success : false,
             message : validationResult
         })
     }
     await updateUser(body, id);
-    res.status(200).json({
+    return res.status(200).json({
         success : true,
         message : "User updated successfully"
     })
@@ -101,7 +101,7 @@ const bulkUsersController = async (req, res) => {
 
     try{
         const users = await fetchBulkUsers(userId, filter);
-        res.status(200).json({
+        return res.status(200).json({
             success : true, 
             users
         })
@@ -110,4 +110,16 @@ const bulkUsersController = async (req, res) => {
     }
 }
 
-module.exports = {signUpController,signInController,updateUserController,bulkUsersController};
+const meController = async (req, res) => {
+    try{
+        const user = getMe(req.userId);
+        return res.status(200).json({
+            success : true,
+            user
+        })
+    }catch(err){
+        next(err);
+    }
+}
+
+module.exports = {signUpController,signInController,updateUserController,bulkUsersController,meController};
