@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard'
 import Send from './pages/Send'
 import NotFound from './pages/NotFound'
 import Appbar from './components/Appbar'
+import PrivateRoute from './components/PrivateRoute'
+import ProtectedLayout from './components/ProtectedLayout'
 
 function App() {
 
@@ -16,8 +18,12 @@ function App() {
       <Routes>
         <Route path='/signup' element={<SignUp/>}/>
         <Route path='/signin' element={<SignIn/>}/>
-        <Route path='/' element={<Dashboard/>}/>
-        <Route path='/send' element={<Send/>}/>
+
+        <Route element={<ProtectedLayout/>}>
+            <Route path='/' element={<Dashboard/>}/>
+            <Route path='/send' element={<Send/>}/>
+        </Route>
+
         <Route path='*' element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>
