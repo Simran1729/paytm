@@ -2,7 +2,7 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { createUser, SignUpSchema } from '../services/Auth';
+import { createUser, SignUpSchema } from '../services/auth';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod'
 import {toast} from 'sonner'
@@ -16,7 +16,7 @@ function SignUp() {
     try{
       await createUser(data);
       toast("User created successfully");
-      navigate('/dashboard', {replace : true});
+      navigate('/', {replace : true});
     }catch(err){
       console.error(err);
       toast("Sign Up Failed");

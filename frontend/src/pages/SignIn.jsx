@@ -4,7 +4,7 @@ import Button from '../components/ui/Button'
 import { Link, replace, useNavigate } from 'react-router-dom'
 import {toast} from 'sonner'
 
-import { SignInSchema, loginUser} from '../services/Auth'
+import { SignInSchema, loginUser} from '../services/auth'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -15,7 +15,7 @@ function SignIn() {
   const onSubmit = async(data) => {
     try{
       await loginUser(data);
-      navigate('/dashboard', {replace : true})
+      navigate('/', {replace : true})
       toast('Login Successful')
     }catch(err){
       console.log(err);

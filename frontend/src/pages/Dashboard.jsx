@@ -1,8 +1,12 @@
-import React from 'react'
+import Users from "../components/Users"
+import Balance from "../components/Balance"
 
 function Dashboard() {
   return (
-    <div>Dashboard</div>
+    <>  
+        <Balance/>
+        <Users/>
+    </>
   )
 }
 
