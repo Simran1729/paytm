@@ -1,22 +1,39 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import Input from "../components/ui/Input"
 import User from './User'
 import { getUsers } from "../services/users";
+import {debounce} from "lodash";
+
 function Users() {
 const [users, setUsers] = useState([]);
 const [loading, setLoading] = useState(false);
 const [filter, setFilter] = useState("");
 
-//add debouncing here
-//TODO : USING YOUR raw fn + loadash
-useEffect(() => {
-    const fetchUsers = async() => {
+
+//custom written
+const debounceFn = (fn, delay) => {
+    let timer;
+
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay)
+    }
+}
+
+const debouncedFetchUsers = useCallback( 
+    debounce(async(filter) => {
         setLoading(true)
         const users = await getUsers(filter);
         setUsers(users);
         setLoading(false);
-    }
-    fetchUsers();
+    }, 600)
+, []
+)
+
+useEffect(() => {
+    debouncedFetchUsers(filter);
 }, [filter])
 
   return (
